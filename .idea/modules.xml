@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/pythonscanner.iml" filepath="$PROJECT_DIR$/.idea/pythonscanner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/vulnscanner.iml" filepath="$PROJECT_DIR$/.idea/vulnscanner.iml" />
     </modules>
   </component>
 </project>

