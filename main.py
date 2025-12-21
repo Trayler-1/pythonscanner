@@ -6,8 +6,8 @@ from crawler import crawl_site
 from xss_payload_loader import load_xss_payloads
 from scanner import scan_xss
 from sqli_scanner import scan_sqli
-from sqli_payload_loader import load_sqli_payloads
-from report_generator import generate_html_report  # ✅ Zaten var
+from report_generator import generate_html_report
+from hassasbilgitarayıcı import hassas_bilgi_tara
 
 # Ayarlar
 MAX_WORKERS = 8
@@ -52,10 +52,14 @@ def worker_scan(url, payloads):
     """URL için hem XSS hem SQLi taraması yapar."""
     xss_res = scan_url_for_forms(url, payloads)
     sqli_res = scan_url_for_sqli(url)
+    info_res = hassas_bilgi_tara(url)
 
-    combined = {"url": url}
-    combined.update(xss_res)
-    combined.update(sqli_res)
+    combined = {
+        "url": url,
+        "xss":xss_res.get("xss"),
+        "sqli": sqli_res.get("sqli"),
+        "info_leak": info_res
+    }
     return combined
 
 def run(start_url):

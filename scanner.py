@@ -39,7 +39,7 @@ def scan_xss(form_details, url, payloads):
 
             # Payload yanıtta görünüyor mu?
             # Eğer görünüyorsa XSS var demektir!
-            if payload in res.text:
+            if payload in res.text and "<script>" in res.text:
                 print(f"    [!!!] XSS BULUNDU! Payload: {payload[:50]}")
                 found_payloads.append(payload)
 

