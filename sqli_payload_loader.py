@@ -19,8 +19,6 @@ def load_sqli_payloads(file_path="payloads/sqli.txt"):
                 if line and not line.startswith("#"):
                     payloads.append(line)
 
-        print(f"[+] {len(payloads)} SQLi payload yüklendi: {file_path}")
-
     except FileNotFoundError:
         print(f"[!] HATA: Dosya bulunamadı: {file_path}")
         print("[!] 'payloads/sqli.txt' dosyasını oluşturun!")

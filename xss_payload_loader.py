@@ -19,8 +19,6 @@ def load_xss_payloads(file_path="payloads/xss.txt"):
                 if line and not line.startswith("#"):
                     payloads.append(line)
 
-        print(f"[+] {len(payloads)} payload yüklendi: {file_path}")
-
     except FileNotFoundError:
         print(f"[!] HATA: Dosya bulunamadı: {file_path}")
         print("[!] 'payloads/xss.txt' dosyasını oluşturun!")

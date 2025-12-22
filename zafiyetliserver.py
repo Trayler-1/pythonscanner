@@ -1,7 +1,7 @@
 from flask import Flask, request, render_template_string
 import sqlite3
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="static")
 
 def init_db():
     """
@@ -90,8 +90,6 @@ def user():
     conn = sqlite3.connect("test.db")
     c = conn.cursor()
 
-    # KASITLI HATA: f-string ile SQL yazmak!
-    # Doğrusu: c.execute("SELECT * FROM users WHERE id = ?", (user_id,))
     query = f"SELECT * FROM users WHERE id = '{user_id}'"
 
     print(f"[SQL] Çalıştırılan sorgu: {query}")

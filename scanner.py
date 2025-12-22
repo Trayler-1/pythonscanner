@@ -19,7 +19,6 @@ def scan_xss(form_details, url, payloads):
     method = form_details["method"]
     inputs = form_details["inputs"]
 
-    # Form action'ı relatif olabilir, absolute yap
     target_url = urljoin(url, action)
 
     found_payloads = []
@@ -37,9 +36,9 @@ def scan_xss(form_details, url, payloads):
             else:
                 res = requests.get(target_url, params=data, timeout=REQUEST_TIMEOUT)
 
-            # Payload yanıtta görünüyor mu?
-            # Eğer görünüyorsa XSS var demektir!
-            if payload in res.text and "<script>" in res.text:
+            # ✅ DÜZELTİLDİ: Payload yanıtta görünüyor mu?
+            # Tüm XSS tiplerini yakalar (script, img, svg, iframe, body)
+            if payload in res.text:
                 print(f"    [!!!] XSS BULUNDU! Payload: {payload[:50]}")
                 found_payloads.append(payload)
 

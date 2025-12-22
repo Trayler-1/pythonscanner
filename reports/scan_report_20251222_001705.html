@@ -1,0 +1,463 @@
+
+    <!DOCTYPE html>
+    <html lang="tr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Güvenlik Tarama Raporu</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                padding: 20px;
+                min-height: 100vh;
+            }
+            
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+            
+            .header {
+                background: white;
+                padding: 40px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                margin-bottom: 30px;
+            }
+            
+            .header h1 {
+                color: #2c3e50;
+                font-size: 36px;
+                margin-bottom: 20px;
+            }
+            
+            .header-info {
+                color: #7f8c8d;
+                font-size: 14px;
+            }
+            
+            .stats {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 20px;
+                margin-bottom: 30px;
+            }
+            
+            .stat {
+                background: white;
+                padding: 30px;
+                border-radius: 15px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+                text-align: center;
+                transition: transform 0.3s;
+            }
+            
+            .stat:hover {
+                transform: translateY(-5px);
+            }
+            
+            .stat.total {
+                border-top: 5px solid #3498db;
+            }
+            
+            .stat.xss {
+                border-top: 5px solid #e74c3c;
+            }
+            
+            .stat.sqli {
+                border-top: 5px solid #e67e22;
+            }
+            
+            .stat.info {
+                border-top: 5px solid #9b59b6;
+            }
+            
+            .stat h2 {
+                font-size: 48px;
+                font-weight: bold;
+                color: #2c3e50;
+                margin: 10px 0;
+            }
+            
+            .stat p {
+                color: #7f8c8d;
+                font-size: 16px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+            
+            .vulnerabilities {
+                background: white;
+                padding: 40px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            }
+            
+            .vuln-title {
+                color: #2c3e50;
+                font-size: 28px;
+                margin-bottom: 30px;
+                padding-bottom: 15px;
+                border-bottom: 3px solid #3498db;
+            }
+            
+            .vuln-item {
+                background: #f8f9fa;
+                padding: 25px;
+                border-radius: 10px;
+                margin-bottom: 20px;
+                border-left: 5px solid #e74c3c;
+            }
+            
+            .vuln-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 15px;
+                flex-wrap: wrap;
+            }
+            
+            .vuln-type {
+                font-size: 20px;
+                font-weight: bold;
+                color: #e74c3c;
+            }
+            
+            .severity {
+                padding: 5px 15px;
+                border-radius: 20px;
+                font-size: 12px;
+                font-weight: bold;
+                text-transform: uppercase;
+                color: white;
+            }
+            
+            .severity-high {
+                background: #e74c3c;
+            }
+            
+            .severity-critical {
+                background: #c0392b;
+            }
+            
+            .severity-medium {
+                background: #f39c12;
+            }
+            
+            .vuln-detail {
+                color: #555;
+                margin: 10px 0;
+                line-height: 1.6;
+            }
+            
+            .vuln-detail strong {
+                color: #2c3e50;
+            }
+            
+            .code-block {
+                background: #2c3e50;
+                color: #ecf0f1;
+                padding: 15px;
+                border-radius: 8px;
+                font-family: 'Courier New', monospace;
+                font-size: 13px;
+                overflow-x: auto;
+                margin: 10px 0;
+                line-height: 1.6;
+            }
+            
+            .recommendation {
+                background: #d4edda;
+                border: 1px solid #c3e6cb;
+                color: #155724;
+                padding: 15px;
+                border-radius: 8px;
+                margin-top: 15px;
+            }
+            
+            .recommendation strong {
+                display: block;
+                margin-bottom: 5px;
+            }
+            
+            .no-vulns {
+                text-align: center;
+                padding: 60px 20px;
+                color: #27ae60;
+            }
+            
+            footer {
+                text-align: center;
+                color: white;
+                margin-top: 40px;
+                padding: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header">
+                <h1>🔒 Güvenlik Tarama Raporu</h1>
+                <div class="header-info">
+                    <p><strong>Hedef:</strong> http://127.0.0.1:5000</p>
+                    <p><strong>Tarih:</strong> 22.12.2025 00:17:05</p>
+                    <p><strong>Tarayıcı:</strong> Vulnerability Scanner v3.0</p>
+                </div>
+            </div>
+            
+            <div class="stats">
+                <div class="stat total">
+                    <h2>4</h2>
+                    <p>Taranan URL</p>
+                </div>
+                <div class="stat xss">
+                    <h2>3</h2>
+                    <p>XSS Zafiyeti</p>
+                </div>
+                <div class="stat sqli">
+                    <h2>1</h2>
+                    <p>SQLi Zafiyeti</p>
+                </div>
+                <div class="stat info">
+                    <h2>4</h2>
+                    <p>Hassas Bilgi</p>
+                </div>
+            </div>
+            
+            <div class="vulnerabilities">
+                <h2 class="vuln-title">🚨 Bulunan Zafiyetler</h2>
+    
+                <div class="vuln-item">
+                    <div class="vuln-header">
+                        <div class="vuln-type">⚠️ Cross-Site Scripting (XSS)</div>
+                        <span class="severity severity-high">YÜKSEK</span>
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>URL:</strong> http://127.0.0.1:5000
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Form Action:</strong> http://127.0.0.1:5000
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Method:</strong> GET
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Başarılı Payloadlar:</strong>
+                    </div>
+                    <div class="code-block">
+                &lt;script&gt;alert('XSS')&lt;/script&gt;<br>&lt;img src=x onerror=alert('XSS')&gt;<br>&lt;svg/onload=alert('XSS')&gt;<br>"&gt;&lt;script&gt;alert(String.fromCharCode(88,83,83))&lt;/script&gt;<br>&lt;iframe src=javascript:alert('XSS')&gt;<br>&lt;body onload=alert('XSS')&gt;<br>" onfocus=alert(1) autofocus="<br>&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;<br>';alert(1);//<br>&lt;details open ontoggle=alert(1)&gt;<br>&lt;marquee onstart=alert(1)&gt;<br>
+                    </div>
+                    <div class="recommendation">
+                        <strong>💡 Çözüm Önerisi:</strong>
+                        Kullanıcı girdilerini HTML encode edin, Content Security Policy (CSP) kullanın, 
+                        ve input validasyonu yapın.
+                    </div>
+                </div>
+                
+                <div class="vuln-item">
+                    <div class="vuln-header">
+                        <div class="vuln-type">⚠️ Hassas Bilgi Sızıntısı</div>
+                        <span class="severity severity-critical">KRİTİK</span>
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Dosya:</strong> .env
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>URL:</strong> http://127.0.0.1:5000/static/.env
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Boyut:</strong> 1232 bytes
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Bulunan Anahtar Kelimeler:</strong>
+                    </div>
+                    <div class="code-block">
+                DB_PASSWORD<br>API_KEY<br>SECRET<br>SECRET_KEY<br>AWS_ACCESS_KEY<br>PASSWORD=<br>STRIPE<br>SENDGRID<br>JWT_SECRET<br>
+                    </div>
+                    <div class="recommendation">
+                        <strong>💡 Çözüm Önerisi:</strong>
+                        Bu dosyaların web üzerinden erişimi engellenmeli, 
+                        .htaccess veya nginx config ile koruma sağlanmalı, 
+                        gizli bilgiler environment variable olarak tutulmalıdır.
+                    </div>
+                </div>
+                
+                    <div class="vuln-item">
+                        <div class="vuln-header">
+                            <div class="vuln-type">⚠️ SQL Injection (id Parametresi)</div>
+                            <span class="severity severity-critical">KRİTİK</span>
+                        </div>
+                        <div class="vuln-detail">
+                            <strong>URL:</strong> http://127.0.0.1:5000/user
+                        </div>
+                        <div class="vuln-detail">
+                            <strong>Tip:</strong> SQL Injection
+                        </div>
+                        <div class="vuln-detail">
+                            <strong>Kanıtlanan Payloadlar:</strong>
+                        </div>
+                        <div class="code-block">
+                    <strong>--- CONTENT-BASED SQLI ---</strong><br>' AND SLEEP(3)--<br>' AND BENCHMARK(5000000,MD5('test'))--<br>1' AND SLEEP(2)--<br>'; WAITFOR DELAY '0:0:3'--<br>1'; WAITFOR DELAY '0:0:2'--<br>'; DROP TABLE users--<br>'; DELETE FROM users--<br>'#<br><br>
+                        </div>
+                        <div class="recommendation">
+                            <strong>💡 Çözüm Önerisi:</strong>
+                            Prepared statements (parametreli sorgular) kullanın, ORM kullanın, 
+                            input validasyonu ve sanitization yapın.
+                        </div>
+                    </div>
+                    
+                <div class="vuln-item">
+                    <div class="vuln-header">
+                        <div class="vuln-type">⚠️ Hassas Bilgi Sızıntısı</div>
+                        <span class="severity severity-critical">KRİTİK</span>
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Dosya:</strong> .env
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>URL:</strong> http://127.0.0.1:5000/static/.env
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Boyut:</strong> 1232 bytes
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Bulunan Anahtar Kelimeler:</strong>
+                    </div>
+                    <div class="code-block">
+                DB_PASSWORD<br>API_KEY<br>SECRET<br>SECRET_KEY<br>AWS_ACCESS_KEY<br>PASSWORD=<br>STRIPE<br>SENDGRID<br>JWT_SECRET<br>
+                    </div>
+                    <div class="recommendation">
+                        <strong>💡 Çözüm Önerisi:</strong>
+                        Bu dosyaların web üzerinden erişimi engellenmeli, 
+                        .htaccess veya nginx config ile koruma sağlanmalı, 
+                        gizli bilgiler environment variable olarak tutulmalıdır.
+                    </div>
+                </div>
+                
+                <div class="vuln-item">
+                    <div class="vuln-header">
+                        <div class="vuln-type">⚠️ Cross-Site Scripting (XSS)</div>
+                        <span class="severity severity-high">YÜKSEK</span>
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>URL:</strong> http://127.0.0.1:5000/
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Form Action:</strong> http://127.0.0.1:5000/
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Method:</strong> GET
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Başarılı Payloadlar:</strong>
+                    </div>
+                    <div class="code-block">
+                &lt;script&gt;alert('XSS')&lt;/script&gt;<br>&lt;img src=x onerror=alert('XSS')&gt;<br>&lt;svg/onload=alert('XSS')&gt;<br>"&gt;&lt;script&gt;alert(String.fromCharCode(88,83,83))&lt;/script&gt;<br>&lt;iframe src=javascript:alert('XSS')&gt;<br>&lt;body onload=alert('XSS')&gt;<br>" onfocus=alert(1) autofocus="<br>&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;<br>';alert(1);//<br>&lt;details open ontoggle=alert(1)&gt;<br>&lt;marquee onstart=alert(1)&gt;<br>
+                    </div>
+                    <div class="recommendation">
+                        <strong>💡 Çözüm Önerisi:</strong>
+                        Kullanıcı girdilerini HTML encode edin, Content Security Policy (CSP) kullanın, 
+                        ve input validasyonu yapın.
+                    </div>
+                </div>
+                
+                <div class="vuln-item">
+                    <div class="vuln-header">
+                        <div class="vuln-type">⚠️ Hassas Bilgi Sızıntısı</div>
+                        <span class="severity severity-critical">KRİTİK</span>
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Dosya:</strong> .env
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>URL:</strong> http://127.0.0.1:5000/static/.env
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Boyut:</strong> 1232 bytes
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Bulunan Anahtar Kelimeler:</strong>
+                    </div>
+                    <div class="code-block">
+                DB_PASSWORD<br>API_KEY<br>SECRET<br>SECRET_KEY<br>AWS_ACCESS_KEY<br>PASSWORD=<br>STRIPE<br>SENDGRID<br>JWT_SECRET<br>
+                    </div>
+                    <div class="recommendation">
+                        <strong>💡 Çözüm Önerisi:</strong>
+                        Bu dosyaların web üzerinden erişimi engellenmeli, 
+                        .htaccess veya nginx config ile koruma sağlanmalı, 
+                        gizli bilgiler environment variable olarak tutulmalıdır.
+                    </div>
+                </div>
+                
+                <div class="vuln-item">
+                    <div class="vuln-header">
+                        <div class="vuln-type">⚠️ Cross-Site Scripting (XSS)</div>
+                        <span class="severity severity-high">YÜKSEK</span>
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>URL:</strong> http://127.0.0.1:5000/comment
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Form Action:</strong> http://127.0.0.1:5000/comment
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Method:</strong> POST
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Başarılı Payloadlar:</strong>
+                    </div>
+                    <div class="code-block">
+                &lt;script&gt;alert('XSS')&lt;/script&gt;<br>&lt;img src=x onerror=alert('XSS')&gt;<br>&lt;svg/onload=alert('XSS')&gt;<br>"&gt;&lt;script&gt;alert(String.fromCharCode(88,83,83))&lt;/script&gt;<br>&lt;iframe src=javascript:alert('XSS')&gt;<br>&lt;body onload=alert('XSS')&gt;<br>" onfocus=alert(1) autofocus="<br>&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;<br>';alert(1);//<br>&lt;details open ontoggle=alert(1)&gt;<br>&lt;marquee onstart=alert(1)&gt;<br>
+                    </div>
+                    <div class="recommendation">
+                        <strong>💡 Çözüm Önerisi:</strong>
+                        Kullanıcı girdilerini HTML encode edin, Content Security Policy (CSP) kullanın, 
+                        ve input validasyonu yapın.
+                    </div>
+                </div>
+                
+                <div class="vuln-item">
+                    <div class="vuln-header">
+                        <div class="vuln-type">⚠️ Hassas Bilgi Sızıntısı</div>
+                        <span class="severity severity-critical">KRİTİK</span>
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Dosya:</strong> .env
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>URL:</strong> http://127.0.0.1:5000/static/.env
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Boyut:</strong> 1232 bytes
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Bulunan Anahtar Kelimeler:</strong>
+                    </div>
+                    <div class="code-block">
+                DB_PASSWORD<br>API_KEY<br>SECRET<br>SECRET_KEY<br>AWS_ACCESS_KEY<br>PASSWORD=<br>STRIPE<br>SENDGRID<br>JWT_SECRET<br>
+                    </div>
+                    <div class="recommendation">
+                        <strong>💡 Çözüm Önerisi:</strong>
+                        Bu dosyaların web üzerinden erişimi engellenmeli, 
+                        .htaccess veya nginx config ile koruma sağlanmalı, 
+                        gizli bilgiler environment variable olarak tutulmalıdır.
+                    </div>
+                </div>
+                
+            </div>
+            
+            <footer>
+                <p>Bu rapor otomatik olarak oluşturulmuştur.</p>
+                <p>Vulnerability Scanner v3.0 - Eğitim Amaçlı</p>
+            </footer>
+        </div>
+    </body>
+    </html>
+    

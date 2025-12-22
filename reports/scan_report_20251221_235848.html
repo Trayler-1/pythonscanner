@@ -1,17 +1,4 @@
-from datetime import datetime
 
-def generate_html_report(results, target_url):
-    """
-    Tarama sonuçlarından profesyonel HTML raporu oluşturur.
-    """
-
-    # İstatistikler
-    total_urls = len(results)
-    total_xss = sum(1 for r in results if r.get("xss"))
-    total_sqli = sum(1 for r in results if r.get("sqli"))
-    total_info = sum(1 for r in results if r.get("info_leak"))
-
-    html = f"""
     <!DOCTYPE html>
     <html lang="tr">
     <head>
@@ -19,162 +6,162 @@ def generate_html_report(results, target_url):
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Güvenlik Tarama Raporu</title>
         <style>
-            * {{
+            * {
                 margin: 0;
                 padding: 0;
                 box-sizing: border-box;
-            }}
+            }
             
-            body {{
+            body {
                 font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                 padding: 20px;
                 min-height: 100vh;
-            }}
+            }
             
-            .container {{
+            .container {
                 max-width: 1200px;
                 margin: 0 auto;
-            }}
+            }
             
-            .header {{
+            .header {
                 background: white;
                 padding: 40px;
                 border-radius: 15px;
                 box-shadow: 0 10px 30px rgba(0,0,0,0.2);
                 margin-bottom: 30px;
-            }}
+            }
             
-            .header h1 {{
+            .header h1 {
                 color: #2c3e50;
                 font-size: 36px;
                 margin-bottom: 20px;
-            }}
+            }
             
-            .header-info {{
+            .header-info {
                 color: #7f8c8d;
                 font-size: 14px;
-            }}
+            }
             
-            .stats {{
+            .stats {
                 display: grid;
                 grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
                 gap: 20px;
                 margin-bottom: 30px;
-            }}
+            }
             
-            .stat {{
+            .stat {
                 background: white;
                 padding: 30px;
                 border-radius: 15px;
                 box-shadow: 0 5px 15px rgba(0,0,0,0.1);
                 text-align: center;
                 transition: transform 0.3s;
-            }}
+            }
             
-            .stat:hover {{
+            .stat:hover {
                 transform: translateY(-5px);
-            }}
+            }
             
-            .stat.total {{
+            .stat.total {
                 border-top: 5px solid #3498db;
-            }}
+            }
             
-            .stat.xss {{
+            .stat.xss {
                 border-top: 5px solid #e74c3c;
-            }}
+            }
             
-            .stat.sqli {{
+            .stat.sqli {
                 border-top: 5px solid #e67e22;
-            }}
+            }
             
-            .stat.info {{
+            .stat.info {
                 border-top: 5px solid #9b59b6;
-            }}
+            }
             
-            .stat h2 {{
+            .stat h2 {
                 font-size: 48px;
                 font-weight: bold;
                 color: #2c3e50;
                 margin: 10px 0;
-            }}
+            }
             
-            .stat p {{
+            .stat p {
                 color: #7f8c8d;
                 font-size: 16px;
                 text-transform: uppercase;
                 letter-spacing: 1px;
-            }}
+            }
             
-            .vulnerabilities {{
+            .vulnerabilities {
                 background: white;
                 padding: 40px;
                 border-radius: 15px;
                 box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            }}
+            }
             
-            .vuln-title {{
+            .vuln-title {
                 color: #2c3e50;
                 font-size: 28px;
                 margin-bottom: 30px;
                 padding-bottom: 15px;
                 border-bottom: 3px solid #3498db;
-            }}
+            }
             
-            .vuln-item {{
+            .vuln-item {
                 background: #f8f9fa;
                 padding: 25px;
                 border-radius: 10px;
                 margin-bottom: 20px;
                 border-left: 5px solid #e74c3c;
-            }}
+            }
             
-            .vuln-header {{
+            .vuln-header {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: 15px;
                 flex-wrap: wrap;
-            }}
+            }
             
-            .vuln-type {{
+            .vuln-type {
                 font-size: 20px;
                 font-weight: bold;
                 color: #e74c3c;
-            }}
+            }
             
-            .severity {{
+            .severity {
                 padding: 5px 15px;
                 border-radius: 20px;
                 font-size: 12px;
                 font-weight: bold;
                 text-transform: uppercase;
                 color: white;
-            }}
+            }
             
-            .severity-high {{
+            .severity-high {
                 background: #e74c3c;
-            }}
+            }
             
-            .severity-critical {{
+            .severity-critical {
                 background: #c0392b;
-            }}
+            }
             
-            .severity-medium {{
+            .severity-medium {
                 background: #f39c12;
-            }}
+            }
             
-            .vuln-detail {{
+            .vuln-detail {
                 color: #555;
                 margin: 10px 0;
                 line-height: 1.6;
-            }}
+            }
             
-            .vuln-detail strong {{
+            .vuln-detail strong {
                 color: #2c3e50;
-            }}
+            }
             
-            .code-block {{
+            .code-block {
                 background: #2c3e50;
                 color: #ecf0f1;
                 padding: 15px;
@@ -184,34 +171,34 @@ def generate_html_report(results, target_url):
                 overflow-x: auto;
                 margin: 10px 0;
                 line-height: 1.6;
-            }}
+            }
             
-            .recommendation {{
+            .recommendation {
                 background: #d4edda;
                 border: 1px solid #c3e6cb;
                 color: #155724;
                 padding: 15px;
                 border-radius: 8px;
                 margin-top: 15px;
-            }}
+            }
             
-            .recommendation strong {{
+            .recommendation strong {
                 display: block;
                 margin-bottom: 5px;
-            }}
+            }
             
-            .no-vulns {{
+            .no-vulns {
                 text-align: center;
                 padding: 60px 20px;
                 color: #27ae60;
-            }}
+            }
             
-            footer {{
+            footer {
                 text-align: center;
                 color: white;
                 margin-top: 40px;
                 padding: 20px;
-            }}
+            }
         </style>
     </head>
     <body>
@@ -219,67 +206,53 @@ def generate_html_report(results, target_url):
             <div class="header">
                 <h1>🔒 Güvenlik Tarama Raporu</h1>
                 <div class="header-info">
-                    <p><strong>Hedef:</strong> {target_url}</p>
-                    <p><strong>Tarih:</strong> {datetime.now().strftime("%d.%m.%Y %H:%M:%S")}</p>
+                    <p><strong>Hedef:</strong> http://127.0.0.1:5000</p>
+                    <p><strong>Tarih:</strong> 21.12.2025 23:58:48</p>
                     <p><strong>Tarayıcı:</strong> Vulnerability Scanner v3.0</p>
                 </div>
             </div>
             
             <div class="stats">
                 <div class="stat total">
-                    <h2>{total_urls}</h2>
+                    <h2>4</h2>
                     <p>Taranan URL</p>
                 </div>
                 <div class="stat xss">
-                    <h2>{total_xss}</h2>
+                    <h2>3</h2>
                     <p>XSS Zafiyeti</p>
                 </div>
                 <div class="stat sqli">
-                    <h2>{total_sqli}</h2>
+                    <h2>1</h2>
                     <p>SQLi Zafiyeti</p>
                 </div>
                 <div class="stat info">
-                    <h2>{total_info}</h2>
+                    <h2>0</h2>
                     <p>Hassas Bilgi</p>
                 </div>
             </div>
             
             <div class="vulnerabilities">
                 <h2 class="vuln-title">🚨 Bulunan Zafiyetler</h2>
-    """
-
-    has_vulns = False
-
-    # XSS zafiyetleri
-    for result in results:
-        if result.get("xss"):
-            has_vulns = True
-            for xss in result["xss"]:
-                html += f"""
+    
                 <div class="vuln-item">
                     <div class="vuln-header">
                         <div class="vuln-type">⚠️ Cross-Site Scripting (XSS)</div>
                         <span class="severity severity-high">YÜKSEK</span>
                     </div>
                     <div class="vuln-detail">
-                        <strong>URL:</strong> {result['url']}
+                        <strong>URL:</strong> http://127.0.0.1:5000
                     </div>
                     <div class="vuln-detail">
-                        <strong>Form Action:</strong> {xss['form']['action']}
+                        <strong>Form Action:</strong> http://127.0.0.1:5000
                     </div>
                     <div class="vuln-detail">
-                        <strong>Method:</strong> {xss['form']['method'].upper()}
+                        <strong>Method:</strong> GET
                     </div>
                     <div class="vuln-detail">
                         <strong>Başarılı Payloadlar:</strong>
                     </div>
                     <div class="code-block">
-                """
-                for payload in xss['payloads']:
-                    safe_payload = payload.replace('<', '&lt;').replace('>', '&gt;')
-                    html += f"{safe_payload}<br>"
-
-                html += """
+                &lt;script&gt;alert('XSS')&lt;/script&gt;<br>&lt;img src=x onerror=alert('XSS')&gt;<br>&lt;svg/onload=alert('XSS')&gt;<br>"&gt;&lt;script&gt;alert(String.fromCharCode(88,83,83))&lt;/script&gt;<br>&lt;iframe src=javascript:alert('XSS')&gt;<br>&lt;body onload=alert('XSS')&gt;<br>" onfocus=alert(1) autofocus="<br>&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;<br>';alert(1);//<br>
                     </div>
                     <div class="recommendation">
                         <strong>💡 Çözüm Önerisi:</strong>
@@ -287,108 +260,85 @@ def generate_html_report(results, target_url):
                         ve input validasyonu yapın.
                     </div>
                 </div>
-                """
-
-        # SQLi zafiyetleri
-        if result.get("sqli"):
-            has_vulns = True
-            for sqli in result["sqli"]:
-                if isinstance(sqli, dict):
-                    html += f"""
+                
+                <div class="vuln-item">
+                    <div class="vuln-header">
+                        <div class="vuln-type">⚠️ Cross-Site Scripting (XSS)</div>
+                        <span class="severity severity-high">YÜKSEK</span>
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>URL:</strong> http://127.0.0.1:5000/
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Form Action:</strong> http://127.0.0.1:5000/
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Method:</strong> GET
+                    </div>
+                    <div class="vuln-detail">
+                        <strong>Başarılı Payloadlar:</strong>
+                    </div>
+                    <div class="code-block">
+                &lt;script&gt;alert('XSS')&lt;/script&gt;<br>&lt;img src=x onerror=alert('XSS')&gt;<br>&lt;svg/onload=alert('XSS')&gt;<br>"&gt;&lt;script&gt;alert(String.fromCharCode(88,83,83))&lt;/script&gt;<br>&lt;iframe src=javascript:alert('XSS')&gt;<br>&lt;body onload=alert('XSS')&gt;<br>" onfocus=alert(1) autofocus="<br>&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;<br>';alert(1);//<br>
+                    </div>
+                    <div class="recommendation">
+                        <strong>💡 Çözüm Önerisi:</strong>
+                        Kullanıcı girdilerini HTML encode edin, Content Security Policy (CSP) kullanın, 
+                        ve input validasyonu yapın.
+                    </div>
+                </div>
+                
                     <div class="vuln-item">
                         <div class="vuln-header">
-                            <div class="vuln-type">⚠️ SQL Injection ({sqli.get('parameter', 'Bilinmiyor')} Parametresi)</div>
+                            <div class="vuln-type">⚠️ SQL Injection (id Parametresi)</div>
                             <span class="severity severity-critical">KRİTİK</span>
                         </div>
                         <div class="vuln-detail">
-                            <strong>URL:</strong> {sqli.get('url', result['url'])}
+                            <strong>URL:</strong> http://127.0.0.1:5000/user
                         </div>
                         <div class="vuln-detail">
-                            <strong>Tip:</strong> {sqli.get('type', 'SQL Injection')}
+                            <strong>Tip:</strong> SQL Injection
                         </div>
                         <div class="vuln-detail">
                             <strong>Kanıtlanan Payloadlar:</strong>
                         </div>
                         <div class="code-block">
-                    """
-
-                    payloads_by_type = sqli.get("payloads_by_type", {})
-
-                    if payloads_by_type:
-                        for vuln_type, payload_list in payloads_by_type.items():
-                            html += f"<strong>--- {vuln_type.upper()} ---</strong><br>"
-
-                            for payload in payload_list:
-                                safe_payload = payload.replace('<', '&lt;').replace('>', '&gt;')
-                                html += f"{safe_payload}<br>"
-
-                            html += "<br>"
-                    else:
-                        html += "N/A"
-
-                    html += """
+                    <strong>--- CONTENT-BASED SQLI ---</strong><br>' AND SLEEP(3)--<br>' AND BENCHMARK(5000000,MD5('test'))--<br>1' AND SLEEP(2)--<br>'; WAITFOR DELAY '0:0:3'--<br>1'; WAITFOR DELAY '0:0:2'--<br>'; DROP TABLE users--<br>'; DELETE FROM users--<br>'#<br><br>
                         </div>
                         <div class="recommendation">
                             <strong>💡 Çözüm Önerisi:</strong>
                             Prepared statements (parametreli sorgular) kullanın, ORM kullanın, 
-                            input validasyonu yapın.
+                            input validasyonu ve sanitization yapın.
                         </div>
                     </div>
-                    """
-
-        # Hassas bilgi sızıntısı
-        if result.get("info_leak"):
-            has_vulns = True
-            for leak in result["info_leak"]:
-                html += f"""
+                    
                 <div class="vuln-item">
                     <div class="vuln-header">
-                        <div class="vuln-type">⚠️ Hassas Bilgi Sızıntısı</div>
-                        <span class="severity severity-critical">KRİTİK</span>
+                        <div class="vuln-type">⚠️ Cross-Site Scripting (XSS)</div>
+                        <span class="severity severity-high">YÜKSEK</span>
                     </div>
                     <div class="vuln-detail">
-                        <strong>Dosya:</strong> {leak['file']}
+                        <strong>URL:</strong> http://127.0.0.1:5000/comment
                     </div>
                     <div class="vuln-detail">
-                        <strong>URL:</strong> {leak['url']}
+                        <strong>Form Action:</strong> http://127.0.0.1:5000/comment
                     </div>
                     <div class="vuln-detail">
-                        <strong>Boyut:</strong> {leak['size']} bytes
+                        <strong>Method:</strong> POST
                     </div>
                     <div class="vuln-detail">
-                        <strong>Bulunan Anahtar Kelimeler:</strong>
+                        <strong>Başarılı Payloadlar:</strong>
                     </div>
                     <div class="code-block">
-                """
-
-                for kw in leak["keywords"]:
-                    html += f"{kw}<br>"
-
-                html += """
+                &lt;script&gt;alert('XSS')&lt;/script&gt;<br>&lt;img src=x onerror=alert('XSS')&gt;<br>&lt;svg/onload=alert('XSS')&gt;<br>"&gt;&lt;script&gt;alert(String.fromCharCode(88,83,83))&lt;/script&gt;<br>&lt;iframe src=javascript:alert('XSS')&gt;<br>&lt;body onload=alert('XSS')&gt;<br>" onfocus=alert(1) autofocus="<br>&lt;/textarea&gt;&lt;script&gt;alert(1)&lt;/script&gt;<br>';alert(1);//<br>
                     </div>
                     <div class="recommendation">
                         <strong>💡 Çözüm Önerisi:</strong>
-                        Bu dosyaların web üzerinden erişimi engellenmeli, 
-                        .htaccess veya nginx config ile koruma sağlanmalı, 
-                        gizli bilgiler environment variable olarak tutulmalıdır.
+                        Kullanıcı girdilerini HTML encode edin, Content Security Policy (CSP) kullanın, 
+                        ve input validasyonu yapın.
                     </div>
                 </div>
-                """
-
-    if not has_vulns:
-        html += """
-            <div class="no-vulns">
-                <div style="font-size: 64px;">✅</div>
-                <h2>Harika Haber!</h2>
-                <p>Taramada herhangi bir zafiyet bulunamadı.</p>
-                <p style="margin-top: 10px; color: #7f8c8d;">
-                    (Bu, sistemin tamamen güvenli olduğu anlamına gelmez. 
-                    Daha kapsamlı testler yapılması önerilir.)
-                </p>
-            </div>
-        """
-
-    html += """
+                
             </div>
             
             <footer>
@@ -398,11 +348,4 @@ def generate_html_report(results, target_url):
         </div>
     </body>
     </html>
-    """
-
-    # Dosyaya kaydet
-    filename = f"reports/scan_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(html)
-
-    return filename
+    
